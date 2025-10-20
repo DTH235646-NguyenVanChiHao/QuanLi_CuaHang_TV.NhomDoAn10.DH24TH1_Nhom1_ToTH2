@@ -56,7 +56,7 @@ class LoginPage:
             return
 
         # Giả lập kiểm tra tài khoản
-        if user == "ChiHao" and pwd == "123":
+        if user == "admin" and pwd == "1":
             messagebox.showinfo("Thành công", "Đăng nhập thành công!")
             self.frame.destroy()  # xoá form login
             self.on_login_success()  # gọi hàm hiển thị app chính

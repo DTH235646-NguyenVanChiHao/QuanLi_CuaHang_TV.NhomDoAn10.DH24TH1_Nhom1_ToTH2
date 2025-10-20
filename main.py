@@ -47,7 +47,7 @@ class MainApp:
         self.container.pack(fill="both", expand=True)
 
         # Left navigation
-        self.left_nav = ctk.CTkFrame(self.container, width=260, corner_radius=0,fg_color="#FFFFFF")
+        self.left_nav = ctk.CTkFrame(self.container, width=260, corner_radius=0,fg_color="#2D3748")
         self.left_nav.pack(side="left", fill="y")
 
         # Right content
@@ -57,20 +57,26 @@ class MainApp:
         self._build_navbar()
         self._build_pages()
 
-    def logout(self):
-        self.frame.destroy()
-        LoginPage(self.root, on_login_success=self._show_main_app)
 
+#----------------------------------------------------
+    def logout(self):
+        # self.container_logo_name.destroy()
+        # self.container.destroy()
+        # LoginPage(self.root, on_login_success=self._show_main_app)
+        print("cannot log out")
+
+#----------------------------------------------------
     def _build_navbar(self):
-        # Header
-        header = ctk.CTkLabel(self.left_nav, text="POS System", font=ctk.CTkFont(size=16, weight="bold"))
+        # This will be create the blank => for visual
+        header = ctk.CTkLabel(self.left_nav, text="", font=ctk.CTkFont(size=32, weight="bold"))
         header.pack(pady=16)
 
         buttons = [
             ("Dashboard", lambda: self.show_page("Dashboard")),
             ("Sales", lambda: self.show_page("Sales")),
             ("History", lambda: self.show_page("History")),
-            ("Log out",lambda: self.logout())
+            #Cannot log out
+            ("Log out",lambda : self.logout())
         ]
 
           #Chu to hon - dam hon
@@ -81,11 +87,14 @@ class MainApp:
                   self.left_nav,
                   text=text,
                  command=cmd,
+                 
+                 corner_radius=0,
                  fg_color="transparent",            # nền trong suốt = default is blue
-                  text_color=["#8C8C8C", "#000000"], # chữ mờ -> đậm khi hover/nhấn
-                 hover_color="#D9D9D9"              # nền sáng khi hover
+                  text_color="#DCDADA", # chữ mờ -> đậm khi hover/nhấn
+                 hover_color="#FCF7F7" ,
+                              font=('Roboto', 20)             # nền sáng khi hover
                 )
-            b.pack(fill="x", padx=12, pady=6)
+            b.pack(fill="x", pady = 30)
 
           #Them nut logout
 
@@ -134,10 +143,11 @@ def start_app():
 
     root = ctk.CTk()
 
-    # def show_main():
-    MainApp(root)
+    def show_main():
+        MainApp(root)
+
     #Pass show_main into login => success -> login + call show main, which is containing maiapp()
-    # LoginPage(root, on_login_success=show_main)
+    LoginPage(root, on_login_success=show_main)
 
     root.mainloop()
 
