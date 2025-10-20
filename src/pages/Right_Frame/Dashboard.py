@@ -16,7 +16,7 @@ class Dashboard:
     def __init__(self, parent):
 
         # Frame chính của Dashboard
-        self.frame = ctk.CTkFrame(parent, corner_radius=10)
+        self.frame = ctk.CTkFrame(parent, corner_radius=10 )
         self.frame.pack(fill="both", expand=True, padx=12, pady=12)
 
         # Header

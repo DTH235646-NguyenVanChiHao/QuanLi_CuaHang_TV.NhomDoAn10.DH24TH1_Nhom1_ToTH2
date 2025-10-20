@@ -25,7 +25,7 @@ class MainApp:
 
 
           # Logo + Name container
-        self.container_logo_name = ctk.CTkFrame(self.root, height=200, fg_color="#0D47A1",corner_radius=0)
+        self.container_logo_name = ctk.CTkFrame(self.root, height=700, fg_color="#3CB251",corner_radius=0)
         self.container_logo_name.pack(fill="x", side="top")   # pack it first
 
         #Log
@@ -43,11 +43,11 @@ class MainApp:
         self.app_name_label.pack(side="left")
 
         # Container chính
-        self.container = ctk.CTkFrame(self.root)
+        self.container = ctk.CTkFrame(self.root,fg_color = "#D8E0D9")
         self.container.pack(fill="both", expand=True)
 
         # Left navigation
-        self.left_nav = ctk.CTkFrame(self.container, width=260, corner_radius=0,fg_color="#212121")
+        self.left_nav = ctk.CTkFrame(self.container, width=260, corner_radius=0,fg_color="#FFFFFF")
         self.left_nav.pack(side="left", fill="y")
 
         # Right content
@@ -70,18 +70,21 @@ class MainApp:
             ("Dashboard", lambda: self.show_page("Dashboard")),
             ("Sales", lambda: self.show_page("Sales")),
             ("History", lambda: self.show_page("History")),
+            ("Log out",lambda: self.logout())
         ]
 
           #Chu to hon - dam hon
+
+          #Transparent = opacity = 0
         for (text, cmd) in buttons:
             b = ctk.CTkButton(
-                self.left_nav,
-                text=text,
-                command=cmd,
-                fg_color="transparent",
-                text_color=("#EEEEEE", "#EEEEEE"),
-                hover_color=("#e0e0e0", "#333333")
-            )
+                  self.left_nav,
+                  text=text,
+                 command=cmd,
+                 fg_color="transparent",            # nền trong suốt = default is blue
+                  text_color=["#8C8C8C", "#000000"], # chữ mờ -> đậm khi hover/nhấn
+                 hover_color="#D9D9D9"              # nền sáng khi hover
+                )
             b.pack(fill="x", padx=12, pady=6)
 
           #Them nut logout
