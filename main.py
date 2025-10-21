@@ -12,7 +12,9 @@ from src.pages.Login.main import LoginPage
 from src.pages.Right_Frame.Dashboard import Dashboard
 from  src.pages.Right_Frame.History import History
 from  src.pages.Right_Frame.Sales import Sales
-from  src.pages.Right_Frame.Purchase import Purchase
+
+# ----- My weakness -------
+# from  src.pages.Right_Frame.Purchase import Purchase
 
 class MainApp:
     def __init__(self, root):
@@ -107,7 +109,9 @@ class MainApp:
         
         self.pages["Dashboard"] = Dashboard(self.right_content)
         self.pages["Sales"] = Sales(self.right_content, self)
-        self.pages["Purchase"] = Purchase(self.right_content, self)
+
+        # self.pages["Purchase"] = Purchase(self.right_content, self)
+        
         self.pages["History"] = History(self.right_content, self)
 
         #Access frame (this is a properties of each classes)
@@ -144,7 +148,7 @@ def start_app():
     root = ctk.CTk()
 
     def show_main():
-        MainApp(root)
+         MainApp(root)
 
     #Pass show_main into login => success -> login + call show main, which is containing maiapp()
     LoginPage(root, on_login_success=show_main)

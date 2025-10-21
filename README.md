@@ -10,3 +10,5 @@
 - messagebox <- Tkinter
 
 - pip install Pillow
+
+- pip install pyodbc
