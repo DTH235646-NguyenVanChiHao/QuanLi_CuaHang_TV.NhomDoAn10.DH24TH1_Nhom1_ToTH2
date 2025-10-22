@@ -1,5 +1,8 @@
 import customtkinter as ctk
 from tkinter import ttk
+import tkinter as tk
+
+from src.config.db import DB
 
 class Dashboard:
     def __init__(self, parent):
@@ -114,20 +117,47 @@ class Dashboard:
 
     def _create_table(self):
       # Dùng treeview của Tkinter
-      devices_Table = ttk.Treeview(self.frame_table, columns=("id", "name", "quantity","price"), show="headings")
-      devices_Table.pack(fill="both", expand=True)
+      self.devices_Table = ttk.Treeview(self.frame_table, columns=("id", "name", "quantity","price","provider","date"), show="headings")
+      self.devices_Table.pack(fill="both", expand=True)
 
-      devices_Table.heading("id", text="Mã sản phẩm")
-      devices_Table.heading("name", text="Tên sản phẩm")
-      devices_Table.heading("quantity",text="Số lượng còn lại")
-      devices_Table.heading("price", text="Giá sản phẩm")
+      self.devices_Table.heading("id", text="Mã sản phẩm")
+      self.devices_Table.heading("name", text="Tên sản phẩm")
+      self.devices_Table.heading("quantity",text="Số lượng còn lại")
+      self.devices_Table.heading("price", text="Giá sản phẩm")
+      self.devices_Table.heading("provider",text="Nhà Cung Cấp")
+      self.devices_Table.heading("date",text="Ngày nhập")
 
-      devices_Table.column("id", width=80, anchor="center")
-      devices_Table.column("name", width=200)
+      self.devices_Table.column("id", width=80, anchor="center")
+      self.devices_Table.column("name", width=200)
+
+      self.load_data()
 
       #call load_
+
+    def ScrollBar(self,parent):
+
       
-    #   def load_value():
+    def load_data(self):
+        for i in self.devices_Table.get_children():
+            self.devices_Table.delete(i)
+
+        db = DB('SQL Server', 'ADMIN-PC\\SQLEXPRESS', 'Quan_Li_TV')
+        
+        values = db.searchTable("SanPham")
+        for row in values:
+            # After get row from values => using tuple [(tuple of device 1) , (2) ,(3) ...]
+            formatted_row = (
+                row[0],  
+                row[1],
+                row[2],  # SLConLai - giữ nguyên
+                f"{float(row[3]):,.0f} VND",  # SoTien - format tiền
+                row[4],  # NhaCC - giữ nguyên
+                str(row[5])  # NgayNhap - chuyển thành string
+            )
+            self.devices_Table.insert("", tk.END, values=formatted_row)
+        
+        db.conn.close()
+
         
 
     

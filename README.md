@@ -12,3 +12,6 @@
 - pip install Pillow
 
 - pip install pyodbc
+
+
+//Lỗi này xảy ra vì bạn đang sử dụng %s (của MySQL) thay vì ? (của SQL Server/pyodbc). Dưới đây là code sửa lỗi:
