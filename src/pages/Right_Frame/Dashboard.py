@@ -18,6 +18,7 @@ class Dashboard:
             text_color="#333333"
         )
         header.pack(anchor="w", pady=(0, 12), padx=6)
+        #w is for west (left) alignment
 
         # ===== CARDS SECTION =====
         self.cards_frame = ctk.CTkFrame(self.frame, fg_color="transparent")
@@ -26,17 +27,26 @@ class Dashboard:
         self._create_cards()
 
         # ===== SEARCH & FILTER BAR =====
+        self.frame_functional_buttons_search = ctk.CTkFrame(
+            self.frame,
+            fg_color="transparent"
+        )
+        self.frame_functional_buttons_search.pack(fill="x")
+
+        self._create_buttons()
         self._create_search_bar()
 
         # ===== TABLE SECTION =====
         self.frame_table = ctk.CTkFrame(
             self.frame,
-            fg_color="#FFFFFF",
-            corner_radius=8
+            fg_color="transparent",
+            corner_radius=8,height=300
         )
         self.frame_table.pack(fill="both", expand=True, pady=(12, 0), padx=6)
 
+   
         self._create_table()
+        
 
     # ---------- Cards Section ----------
     def _create_cards(self):
@@ -77,14 +87,55 @@ class Dashboard:
 
         return frame
 
-    # ---------- Search / Filter Section ----------
-    def _create_search_bar(self):
-        self.frame_search = ctk.CTkFrame(
-            self.frame,
-            fg_color="#FFFFFF",
+    # ---------- Search / Filter Section / Buttons----------
+    def _create_buttons(self):
+        self.frame_buttons = ctk.CTkFrame(
+            self.frame_functional_buttons_search,
+            fg_color="transparent",
             corner_radius=8
         )
-        self.frame_search.pack(fill="x", pady=12, padx=6, ipady=6)
+        self.frame_buttons.pack(side='left', pady=12, padx=(0, 6), ipady=6)
+    
+        self.btn_add_product = ctk.CTkButton(
+            self.frame_buttons,
+            text="➕ Add Product",
+            fg_color="#28A745",
+            hover_color="#1E7E34",
+            corner_radius=6,
+            width=120
+        )
+        self.btn_add_product.pack(side="left", padx=6, pady=12)
+
+        self.btn_update_product = ctk.CTkButton(
+            self.frame_buttons,
+            text="✏️ Update Product",
+            fg_color="#FFC107",
+            hover_color="#E0A800",
+            corner_radius=6,
+            width=140
+        )   
+
+        self.btn_delete_product = ctk.CTkButton(
+            self.frame_buttons,     
+            text="🗑️ Delete Product",
+            fg_color="#DC3545",
+            hover_color="#C82333",
+            corner_radius=6,
+            width=140
+        )
+        self.btn_delete_product.pack(side="left", padx=6, pady=12)
+
+          
+
+
+
+    def _create_search_bar(self):
+        self.frame_search = ctk.CTkFrame(
+            self.frame_functional_buttons_search,
+            fg_color="transparent",
+            corner_radius=8
+        )
+        self.frame_search.pack(side="right", pady=12, padx=(6, 0), ipady=6)
 
         search_entry = ctk.CTkEntry(
             self.frame_search,
@@ -116,27 +167,58 @@ class Dashboard:
         sort_btn.pack(side="left", padx=6)
 
     def _create_table(self):
-      # Dùng treeview của Tkinter
-      self.devices_Table = ttk.Treeview(self.frame_table, columns=("id", "name", "quantity","price","provider","date"), show="headings")
-      self.devices_Table.pack(fill="both", expand=True)
+         # Khung chứa bảng
+         self.frame_table.grid_rowconfigure(0, weight=1)
+         self.frame_table.grid_columnconfigure(0, weight=1)
 
-      self.devices_Table.heading("id", text="Mã sản phẩm")
-      self.devices_Table.heading("name", text="Tên sản phẩm")
-      self.devices_Table.heading("quantity",text="Số lượng còn lại")
-      self.devices_Table.heading("price", text="Giá sản phẩm")
-      self.devices_Table.heading("provider",text="Nhà Cung Cấp")
-      self.devices_Table.heading("date",text="Ngày nhập")
+         # Tạo Treeview
+         self.devices_Table = ttk.Treeview(
+             self.frame_table,
+             columns=("id", "name", "quantity", "price", "provider", "date"),
+             show="headings"
+            )
 
-      self.devices_Table.column("id", width=80, anchor="center")
-      self.devices_Table.column("name", width=200)
+    # Khai báo tiêu đề cột
+         self.devices_Table.heading("id", text="Mã sản phẩm")
+         self.devices_Table.heading("name", text="Tên sản phẩm")
+         self.devices_Table.heading("quantity", text="Số lượng còn lại")
+         self.devices_Table.heading("price", text="Giá sản phẩm")
+         self.devices_Table.heading("provider", text="Nhà cung cấp")
+         self.devices_Table.heading("date", text="Ngày nhập")
 
-      self.load_data()
+            # Cấu hình độ rộng cột
+         self.devices_Table.column("id", width=100, anchor="center")
+         self.devices_Table.column("name", width=180)
+         self.devices_Table.column("quantity", width=140, anchor="center")
+         self.devices_Table.column("price", width=140, anchor="e")
+         self.devices_Table.column("provider", width=160)
+         self.devices_Table.column("date", width=120, anchor="center")
 
-      #call load_
+         # Gọi ScrollBar
+         self._create_scrollbar()
 
-    def ScrollBar(self,parent):
+         # Hiển thị bảng và thanh cuộn
+         self.devices_Table.grid(row=0, column=0, sticky="nsew")
 
-      
+         self.load_data()
+
+
+    def _create_scrollbar(self):
+    # Scrollbar dọc
+        scroll_y = ttk.Scrollbar(self.frame_table, orient="vertical", command=self.devices_Table.yview)
+        scroll_y.grid(row=0, column=1, sticky="ns")
+        #ns is for north-south (top to bottom) direction
+
+    # Scrollbar ngang
+        scroll_x = ttk.Scrollbar(self.frame_table, orient="horizontal", command=self.devices_Table.xview)
+        scroll_x.grid(row=1, column=0, sticky="ew")
+        #ew is for east-west (left to right) direction
+
+    # Liên kết với Treeview
+        self.devices_Table.configure(yscrollcommand=scroll_y.set, xscrollcommand=scroll_x.set)
+
+
+#-----------------------Functionalities -----------------------------
     def load_data(self):
         for i in self.devices_Table.get_children():
             self.devices_Table.delete(i)
@@ -149,14 +231,39 @@ class Dashboard:
             formatted_row = (
                 row[0],  
                 row[1],
-                row[2],  # SLConLai - giữ nguyên
-                f"{float(row[3]):,.0f} VND",  # SoTien - format tiền
-                row[4],  # NhaCC - giữ nguyên
-                str(row[5])  # NgayNhap - chuyển thành string
+                row[2],  
+                f"{float(row[3]):,.0f} VND",  
+                row[4],  
+                str(row[5])  
             )
             self.devices_Table.insert("", tk.END, values=formatted_row)
         
         db.conn.close()
+
+    def refresh_table(self):
+        self.load_data()
+        print("Table refreshed!")
+
+    def insert_product(self, MaSP, TenSP, SLConLai, SoTien, Nha_CC, NgayNhap):
+        
+
+        db = DB('SQL Server', 'ADMIN-PC\\SQLEXPRESS', 'Quan_Li_TV')
+        db.insertProducts(MaSP, TenSP, SLConLai, SoTien, Nha_CC, NgayNhap)
+        db.conn.close()
+        self.refresh_table()
+
+    def update_product(self, id, TenSP, SLConLai, SoTien, Nha_CC, NgayNhap):
+        db = DB('SQL Server', 'ADMIN-PC\\SQLEXPRESS', 'Quan_Li_TV')
+        db.updateProducts(id, TenSP, SLConLai, SoTien, Nha_CC, NgayNhap)
+        db.conn.close()
+        self.refresh_table()
+
+    def delete_product(self, id):
+        db = DB('SQL Server', 'ADMIN-PC\\SQLEXPRESS', 'Quan_Li_TV')
+        db.deleteProducts(id)
+        db.conn.close()
+        self.refresh_table()
+
 
         
 
