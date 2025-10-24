@@ -34,7 +34,7 @@ class DB:
             print(f"Lỗi: {ex}")
             return []
 
-    def insertProducts(self, table_name, id, TenSP, SLConLai, SoTien, Nha_CC, NgayNhap):
+    def insertProducts(self,id, TenSP, SLConLai, SoTien, Nha_CC, NgayNhap):
         try:
             self.cursor.execute("INSERT INTO SanPham VALUES (?, ?, ?, ?, ?, ?)",
                           (id, TenSP, SLConLai, SoTien, Nha_CC, NgayNhap))
@@ -112,6 +112,11 @@ class DB:
             print("Xóa hóa đơn thành công!")
         except pyodbc.Error as ex:
             print(f"Lỗi: {ex}")
+
+#Explain here: check if product id exists in database
+    def is_exist(self, id):
+        self.cursor.execute("SELECT COUNT(*) FROM SanPham WHERE MaSP = ?", (id,))
+        return self.cursor.fetchone()[0] > 0
 
    
 
