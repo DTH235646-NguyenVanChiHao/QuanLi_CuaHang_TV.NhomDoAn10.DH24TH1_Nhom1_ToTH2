@@ -7,20 +7,35 @@ Requirements
 
 import customtkinter as ctk
 from PIL import Image
+from tkinter import messagebox
+
 from src.pages.Login.main import LoginPage
 
 from src.pages.Right_Frame.Dashboard import Dashboard
 from  src.pages.Right_Frame.History import History
 from  src.pages.Right_Frame.Sales import Sales
 
+from src.config.db import DB
+
 # ----- My weakness -------
 # from  src.pages.Right_Frame.Purchase import Purchase
 
 class MainApp:
     def __init__(self, root):
+
+        #connect db 
+        self.db = DB('SQL Server', 'ADMIN-PC\\SQLEXPRESS', 'Quan_Li_TV')
+
+        
+
+        #
+
         self.root = root
         self.root.title("POS Application")
         self.root.geometry("1280x660+0+0")
+
+        # Khi người dùng đóng cửa sổ, đóng DB trước khi thoát
+        self.root.protocol("WM_DELETE_WINDOW", lambda: closing_app(self.root, self.db))
 
         #Logo + Name
         
@@ -34,6 +49,18 @@ class MainApp:
         my_image = ctk.CTkImage(light_image=Image.open("src/assets/heart.png"),
                                   
                                   size=(18, 18))
+        
+        # Avatar
+        avatar_image = ctk.CTkImage(light_image=Image.open("src/assets/heart.png"), size=(36, 36))
+        self.avatar_label = ctk.CTkLabel(
+            self.container_logo_name,
+            image=avatar_image,
+            text="",
+            corner_radius=100
+        )
+        self.avatar_label.image = avatar_image  # giữ tham chiếu tránh bị xóa bộ nhớ
+        self.avatar_label.pack(side="right", padx=20)
+
         #Name
         self.app_name_label = ctk.CTkLabel(
             self.container_logo_name,
@@ -62,10 +89,19 @@ class MainApp:
 
 #----------------------------------------------------
     def logout(self):
-        # self.container_logo_name.destroy()
-        # self.container.destroy()
-        # LoginPage(self.root, on_login_success=self._show_main_app)
-        print("cannot log out")
+        
+        if messagebox.askokcancel("Log out", "Do you want to log out?"):
+            try:
+                self.db.close()  # đóng kết nối hiện tại
+            except Exception as e:
+                print(f"Error closing DB: {e}")
+
+        # Xóa các frame hiện có
+        for widget in self.root.winfo_children():
+            widget.destroy()
+
+        # Quay lại trang Login
+        LoginPage(self.root, on_login_success=lambda: MainApp(self.root))
 
 #----------------------------------------------------
     def _build_navbar(self):
@@ -107,12 +143,12 @@ class MainApp:
         #this.pages.dashboard = new dashboard()
         #Don't use because python automatically invoke constructor (__init__)
         
-        self.pages["Dashboard"] = Dashboard(self.right_content)
-        self.pages["Sales"] = Sales(self.right_content, self)
+        self.pages["Dashboard"] = Dashboard(self.right_content,self.db)
+        self.pages["Sales"] = Sales(self.right_content, self,self.db)
 
         # self.pages["Purchase"] = Purchase(self.right_content, self)
         
-        self.pages["History"] = History(self.right_content, self)
+        self.pages["History"] = History(self.right_content, self,self.db)
 
         #Access frame (this is a properties of each classes)
         for page in self.pages.values():
@@ -140,6 +176,13 @@ class MainApp:
 
         master.after(duration, toast.destroy)
 
+def closing_app(root,db):
+    if messagebox.askokcancel("Exit", "Do you want to exit the application?"):
+        try:
+            db.close()  # ✅ Đóng kết nối
+        except Exception as e:
+            print(f"Error closing DB: {e}")
+        root.destroy()  # ✅ Thoát ứng dụng
 
 def start_app():
     ctk.set_appearance_mode("System")  # "Light" hoặc "Dark"
@@ -148,11 +191,10 @@ def start_app():
     root = ctk.CTk()
 
     def show_main():
-         MainApp(root)
+        main =   MainApp(root)
 
     #Pass show_main into login => success -> login + call show main, which is containing maiapp()
     LoginPage(root, on_login_success=show_main)
-
     root.mainloop()
 
 

@@ -5,15 +5,17 @@ from tkcalendar  import DateEntry
 from tkinter import messagebox,simpledialog
 from datetime import datetime
 
+from src.config.db import DB
 
 #Weakness => call db everywhere 
 
-from src.config.db import DB
+
 
 class Dashboard:
-    def __init__(self, parent):
+    def __init__(self, parent,database = DB('SQL Server', 'ADMIN-PC\\SQLEXPRESS', 'Quan_Li_TV')):
+        self.db = database
         #connect db
-        
+        self.false = False
         # Main Frame
         self.frame = ctk.CTkFrame(parent, corner_radius=12, fg_color="#F4F4F4")
         self.frame.pack(fill="both", expand=True, padx=16, pady=16)
@@ -57,13 +59,22 @@ class Dashboard:
         
 
     # ---------- Cards Section ----------
+    def refresh_cards(self):
+        for widget in self.cards_frame.winfo_children():
+            widget.destroy()
+        self._create_cards()
+
     def _create_cards(self):
+        revuenue = self.db.total_revenue()
+        orders = self.db.count_orders_today()
+        lowstock = self.db.count_low_stock_products()
+
         # Use grid layout for even spacing
         self.cards_frame.columnconfigure((0, 1, 2), weight=1, uniform="a")
 
-        self.card_revenue = self._card(self.cards_frame, "💰 Doanh thu hôm nay", "12,300,000 ₫", 0)
-        self.card_orders = self._card(self.cards_frame, "🧾 Đơn hàng hôm nay", "35", 1)
-        self.card_lowstock = self._card(self.cards_frame, "⚠️ Sản phẩm sắp hết", "4", 2)
+        self.card_revenue = self._card(self.cards_frame, "💰 Doanh thu hôm nay", f"{revuenue} ₫", 0)
+        self.card_orders = self._card(self.cards_frame, "🧾 Đơn hàng hôm nay", f"{orders}", 1)
+        self.card_lowstock = self._card(self.cards_frame, "⚠️ Sản phẩm sắp hết", f"{lowstock}", 2)
 
     def _card(self, parent, title, value, column):
         frame = ctk.CTkFrame(
@@ -74,6 +85,8 @@ class Dashboard:
             border_color="#E0E0E0"
         )
         frame.grid(row=0, column=column, padx=8, ipadx=4, ipady=6, sticky="nsew")
+
+        #"nsew": Kéo giãn widget để nó lấp đầy toàn bộ ô (cả 4 hướng)
 
         title_label = ctk.CTkLabel(
             frame,
@@ -134,19 +147,61 @@ class Dashboard:
 
           
 
+    
+    def on_text_change(self,*args,column):
+        
 
+        # I take % syntax here instead of src.config.db.py
+        products = self.db.suggestions_product_names(column, f"%{self.search_var.get()}%")
+
+        self.reset_table()
+
+    
+        for row in products:
+            # After get row from values => using tuple [(tuple of device 1) , (2) ,(3) ...]
+            formatted_row = (
+                row[0],  
+                row[1],
+                row[2],  
+                f"{float(row[3]):,.0f} VND",  
+                row[4],  
+                str(row[5])  
+            )
+            self.devices_Table.insert("", tk.END, values=formatted_row)
+        
+           
 
     def _create_search_bar(self):
         
 
-        search_entry = ctk.CTkEntry(
+        self.column_combo = ctk.CTkComboBox(
            self.frame_functional_buttons_search,
-            placeholder_text="🔍 Search by product name...",
+            values=["Mã sản phẩm", "Tên sản phẩm", "Nhà cung cấp"],
+            width=140,
+            height=32,
+            corner_radius=8
+        )
+        self.column_combo.pack(side="right", padx=6)
+
+        columns = {
+            "Mã sản phẩm": "MaSP",
+            "Tên sản phẩm": "TenSP",
+            "Nhà cung cấp": "NhaCC"
+        }
+
+        #auto complete
+
+        self.search_var = ctk.StringVar()
+        self.search_var.trace_add("write", lambda *args: self.on_text_change(column=columns[self.column_combo.get()]))
+
+        self.search_entry = ctk.CTkEntry(
+           self.frame_functional_buttons_search,
+            placeholder_text="🔍 Search by product name...",textvariable=self.search_var,
             width=240,
             height=32,
             corner_radius=8
         )
-        search_entry.pack(side="right", padx=6)
+        self.search_entry.pack(side="right", padx=6)
 
         filter_btn = ctk.CTkButton(
            self.frame_functional_buttons_search,
@@ -155,6 +210,7 @@ class Dashboard:
             hover_color="#0056D2",
             corner_radius=6,
             width=80
+            ,command=self.filter_action
         )
         filter_btn.pack(side="right", padx=6)
 
@@ -164,9 +220,66 @@ class Dashboard:
             fg_color="#00B894",
             hover_color="#009970",
             corner_radius=6,
-            width=80
+            width=80,
+            command=self.sort_action
         )
         sort_btn.pack(side="right", padx=6)
+
+
+    # ---------- Table Section ----------
+    def sort_action(self,column= "MaSP", ):
+        self.false = not self.false
+        ascending = self.false
+        self.reset_table()
+       
+        
+        values = self.db.sort_products_by_column("MaSP",ascending)
+        for row in values:
+            # After get row from values => using tuple [(tuple of device 1) , (2) ,(3) ...]
+            formatted_row = (
+                row[0],  
+                row[1],
+                row[2],  
+                f"{float(row[3]):,.0f} VND",  
+                row[4],  
+                str(row[5])  
+            )
+            self.devices_Table.insert("", tk.END, values=formatted_row)
+        
+
+
+    def filter_action(self):
+        columns = {
+            "Mã sản phẩm": "MaSP",
+            "Tên sản phẩm": "TenSP",
+            "Nhà cung cấp": "NhaCC"
+        }
+        self.reset_table()
+        
+        
+        filter_value = self.search_entry.get()
+         
+        values = self.db.filter_products(columns[self.column_combo.get()], filter_value)
+        for row in values:
+            # After get row from values => using tuple [(tuple of device 1) , (2) ,(3) ...]
+            formatted_row = (
+                row[0],  
+                row[1],
+                row[2],  
+                f"{float(row[3]):,.0f} VND",  
+                row[4],  
+                str(row[5])  
+            )
+            self.devices_Table.insert("", tk.END, values=formatted_row)
+        
+
+
+    def autofill_action(self):
+        print("auto")
+
+    def suggestion_action():
+        print("suggestion")
+
 
     def _create_table(self):
          # Khung chứa bảng
@@ -221,13 +334,15 @@ class Dashboard:
 
 
 #-----------------------Functionalities -----------------------------
-    def load_data(self):
+    def reset_table(self):
         for i in self.devices_Table.get_children():
             self.devices_Table.delete(i)
-
-        db = DB('SQL Server', 'ADMIN-PC\\SQLEXPRESS', 'Quan_Li_TV')
+    def load_data(self):
         
-        values = db.searchTable("SanPham")
+        self.reset_table()
+      
+        
+        values = self.db.searchTable("SanPham")
         for row in values:
             # After get row from values => using tuple [(tuple of device 1) , (2) ,(3) ...]
             formatted_row = (
@@ -240,7 +355,7 @@ class Dashboard:
             )
             self.devices_Table.insert("", tk.END, values=formatted_row)
         
-        db.conn.close()
+
 
     def refresh_table(self):
         self.load_data()
@@ -255,15 +370,12 @@ class Dashboard:
         self.refresh_table()
 
     def update_product(self, id, TenSP, SLConLai, SoTien, Nha_CC, NgayNhap):
-        db = DB('SQL Server', 'ADMIN-PC\\SQLEXPRESS', 'Quan_Li_TV')
-        db.updateProducts(id, TenSP, SLConLai, SoTien, Nha_CC, NgayNhap)
-        db.conn.close()
+        
+        self.db.updateProducts(id, TenSP, SLConLai, SoTien, Nha_CC, NgayNhap)
         self.refresh_table()
 
     def delete_product(self, id):
-        db = DB('SQL Server', 'ADMIN-PC\\SQLEXPRESS', 'Quan_Li_TV')
-        db.deleteProducts(id)
-        db.conn.close()
+        self.db.deleteProducts(id)
         self.refresh_table()
 
 #Sub pages -> Add Product, Update Product, Delete Product
@@ -316,6 +428,8 @@ class Dashboard:
         entry_price = ctk.CTkEntry(frame_info, width=160)
         entry_price.grid(row=3, column=1, padx=10, pady=10, sticky="w")
 
+        self.refresh_cards()
+
        
 
         
@@ -323,7 +437,7 @@ class Dashboard:
 
         
         def add_product_action():
-            db = DB('SQL Server', 'ADMIN-PC\\SQLEXPRESS', 'Quan_Li_TV')
+           
             if not all([entry_id.get(), entry_name.get(), entry_quantity.get(), entry_price.get(), entry_provider.get(), entry_date.get()]):
                 messagebox.showinfo(title="Error", message="Please fill in all fields.")
                 return
@@ -337,10 +451,10 @@ class Dashboard:
 
             # Lặp đến khi có ID hợp lệ
             while True:
-                if not db.is_exist(MaSP):  # kiểm tra trực tiếp trong database
-                    db.insertProducts(MaSP, TenSP, SLConLai, SoTien, Nha_CC, NgayNhap)
+                if not self.db.is_exist(MaSP):  # kiểm tra trực tiếp trong database
+                    self.db.insertProducts(MaSP, TenSP, SLConLai, SoTien, Nha_CC, NgayNhap)
                     messagebox.showinfo("Success", "Product added successfully!")
-                    db.conn.close()
+              
                     break
                 else:
                     messagebox.showinfo("Error", f"Product ID '{MaSP}' already exists.")
@@ -364,6 +478,7 @@ class Dashboard:
 
         # ======= FOCUS VÀ MAINLOOP =======
         entry_id.focus_force()
+        self.refresh_cards()
         
 
         # add_product_window.mainloop()
@@ -373,7 +488,7 @@ class Dashboard:
         
 
     def open_update_product_page(self):
-        db = DB('SQL Server', 'ADMIN-PC\\SQLEXPRESS', 'Quan_Li_TV')
+       
         data = self.get_selected_product()
         if not data:
             return
@@ -456,17 +571,16 @@ class Dashboard:
             new_date = entry_date.get()
 
              # Gọi DB update
-            db.updateProducts(MaSP, new_name, new_quantity, new_price, new_provider, new_date)
+            self.db.updateProducts(MaSP, new_name, new_quantity, new_price, new_provider, new_date)
             messagebox.showinfo("Success", "Product updated successfully!")
             update_product_window.destroy()
-            db.conn.close()
             self.refresh_table()  # cập nhật lại giao diện
 
         ctk.CTkButton(update_product_window, text="Save", command=save_changes).pack(pady=10)
 
 
     def open_delete_product_page(self):
-        db = DB('SQL Server', 'ADMIN-PC\\SQLEXPRESS', 'Quan_Li_TV')
+      
         data = self.get_selected_product()
         if not data:
             return
@@ -476,13 +590,14 @@ class Dashboard:
         #ask for confirmation
         confirm = messagebox.askyesno("Confirm Delete", f"Are you sure you want to delete product '{TenSP}' (ID: {MaSP})?")
         if confirm:
-            db.deleteProducts(MaSP)
+            self.db.deleteProducts(MaSP)
             messagebox.showinfo("Success", "Product deleted successfully!")
         else:
             messagebox.showinfo("Cancelled", "Product deletion cancelled.")
 
-        db.conn.close()
+       
         self.refresh_table()  # cập nhật lại giao diện
+        self.refresh_cards()
 
 
     

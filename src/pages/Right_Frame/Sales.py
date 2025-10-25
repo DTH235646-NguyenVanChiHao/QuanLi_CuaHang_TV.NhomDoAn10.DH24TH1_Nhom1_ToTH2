@@ -14,6 +14,7 @@ from decimal import Decimal
 import random
 from tkinter import messagebox
 from PIL import Image, ImageTk
+from src.config.db import DB
 
 # QR Code (nếu có cài)
 try:
@@ -30,7 +31,7 @@ PRODUCTS = [
 
 
 class Sales:
-    def __init__(self, parent, app):
+    def __init__(self, parent, app,db = DB('SQL Server', 'ADMIN-PC\\SQLEXPRESS', 'Quan_Li_TV')):
         print("Success - sales")
         self.app = app
         self.invoice_items = []

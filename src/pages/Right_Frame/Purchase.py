@@ -6,9 +6,15 @@ Requirements
 
 
 import customtkinter as ctk
+from src.config.db import DB
 
 class Purchase:
-    def __init__(self, parent, app):
+    def __init__(self, parent, app,db = DB('SQL Server', 'ADMIN-PC\\SQLEXPRESS', 'Quan_Li_TV')):
+
+        #connect db
+        self.db = db
+
+        #main
         print("Success - purchase")
 
         self.app = app
