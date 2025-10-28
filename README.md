@@ -34,34 +34,43 @@ SalesManagementSystem/
 └── main.py
 ```
 ## ⚙️ Installation
-### 1️⃣ Prerequisites
+1. Prerequisites
+ - Make sure you have installed the following tools
+    - Python 3.10+
+    - SQL Server 2019+
+    - pip (Python package manager)
 
-Make sure you have installed the following tools:
+2. Clone the Repository
+```bash
+        git clone https://github.com/DTH235646-NguyenVanChiHao/QuanLi_CuaHang_TV.NhomDoAn10.DH24TH1_Nhom1_ToTH2.gitư
+```
 
-Python 3.10+
+3. Install Required Libraries
+```bash
+pip install customtkinter pyodbc Pillow tkcalendar
+```
 
-SQL Server 2019+
 
-pip (Python package manager)
+4. Access Your SQL Server Workplace: 
+   - Create database:  ***Quan_Li_TV***  
+   - Run the script in: db_scripts/SQLQuery1.sql to create tables
+   - Test and ensure your database can run the script
 
-### 2️⃣ Clone the Repository
-git clone https://github.com/yourusername/SalesManagementSystem.git
-cd SalesManagementSystem
+5. Access main.py, detect the following snippet and replace with your own credentials:
+```python
+self.db = DB (Driver , Server , 'Quan_Li_TV')
+```
+**Example:**
+```bash
+        Driver = SQL Server
+        server = 'PC_name\\SQLEXPRESS'
+        database = 'Quan_Li_TV'
+```
 
-### 3️⃣ Install Required Libraries
-pip install customtkinter pyodbc
-
-### 4️⃣ Configure Database Connection
-
-Edit the file database/connect.py and replace the following lines with your own credentials:
-
-server = 'YOUR_SERVER_NAME'
-database = 'SalesDB'
-username = 'YOUR_USERNAME'
-password = 'YOUR_PASSWORD'
-
-### 5️⃣ Run the Application
+6. Run the Application
+```bash
 python main.py
+```
 
 ## 📊 Example Screenshots
 
@@ -74,10 +83,10 @@ python main.py
 # 🧑‍💻 Author
 
 Name: Chi Hao
-Role: Fullstack Developer | English Teacher
-Email: your.email@example.com
+Role: Junior Student at An Giang University
+Email: hao_dth235646@student.agu.edu.vn
 
-GitHub: github.com/yourusername
+GitHub: [github.com/](https://github.com/DTH235646-NguyenVanChiHao)
 
 # 📜 License
 
