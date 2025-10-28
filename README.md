@@ -45,32 +45,35 @@ CHIHIAO_DTH235646_DH24TH1/
 
 ```
 ## ⚙️ Installation
-1. Prerequisites
- - Make sure you have installed the following tools
+**1. Prerequisites**
+
+- Make sure you have installed the following tools:
     - Python 3.10+
     - SQL Server 2019+
     - pip (Python package manager)
 
-2. Clone the Repository
+**2. Clone the Repository**
+
 ```bash
-        git clone https://github.com/DTH235646-NguyenVanChiHao/QuanLi_CuaHang_TV.NhomDoAn10.DH24TH1_Nhom1_ToTH2.gitư
+git clone https://github.com/DTH235646-NguyenVanChiHao/QuanLi_CuaHang_TV.NhomDoAn10.DH24TH1_Nhom1_ToTH2.gitư
 ```
 
-3. Install Required Libraries
+**3. Install Required Libraries**
+
 ```bash
 pip install customtkinter pyodbc Pillow tkcalendar
 ```
-
-
-4. Access Your SQL Server Workplace: 
+**4. Access Your SQL Server Workplace:**
    - Create database:  ***Quan_Li_TV***  
    - Run the script in: db_scripts/SQLQuery1.sql to create tables
    - Test and ensure your database can run the script
 
-5. Access main.py, detect the following snippet and replace with your own credentials:
+**5. Access main.py, detect the following snippet and replace with your own credentials:**
+
 ```python
 self.db = DB (Driver , Server , 'Quan_Li_TV')
 ```
+
 **Example:**
 ```bash
         Driver = SQL Server
