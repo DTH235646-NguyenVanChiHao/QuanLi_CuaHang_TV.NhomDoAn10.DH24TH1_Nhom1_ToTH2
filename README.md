@@ -12,6 +12,7 @@ This project demonstrates my skills in Python (CTkinter) for GUI design, SQL Ser
 ## 🧱 Technologies Used
 
 ## 📂 Project Structure
+```bash
 SalesManagementSystem/
 │
 ├── src/
@@ -31,7 +32,7 @@ SalesManagementSystem/
 │
 ├── README.md
 └── main.py
-
+```
 ## ⚙️ Installation
 ### 1️⃣ Prerequisites
 
