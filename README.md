@@ -83,8 +83,13 @@ python main.py
 # 🧑‍💻 Author
 
 Name: Chi Hao
+
+
 Role: Junior Student at An Giang University
+
+
 Email: hao_dth235646@student.agu.edu.vn
+
 
 GitHub: [github.com/](https://github.com/DTH235646-NguyenVanChiHao)
 
