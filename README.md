@@ -6,32 +6,43 @@ The Sales Management System is a full-stack desktop application designed to supp
 This project demonstrates my skills in Python (CTkinter) for GUI design, SQL Server for database management, and Object-Oriented Programming (OOP) for maintaining clean, scalable code.
 
 ## 🚀 Key Features
+- I completely divide the whole program into smaller, which is called modules. The tiny modules alongside OOP design helps my program more reusable and less complex 
 
+- Being likely to connect to database: Addition - Update - Delete. 
 
+- In sales page, the program can add the products into the receipt and conduct calculate the sum of receipt
 
 ## 🧱 Technologies Used
+- Python + Tkinter + Customtkinter
 
 ## 📂 Project Structure
 ```bash
-SalesManagementSystem/
+CHIHIAO_DTH235646_DH24TH1/
+│
+├── db_scripts/
+│   └── SQLQuery1.sql
 │
 ├── src/
+│   ├── assets/
+│   │   └── heart.png
+│   │
+│   ├── config/
+│   │   └── db.py
+│   │
 │   ├── pages/
-│   │   ├── AddProduct.py
-│   │   ├── UpdateProduct.py
-│   │   ├── History.py
-│   │   └── MainFrame.py
+│   │   ├── Login/
+│   │   │   └── main.py
+│   │   │
+│   │   ├── Right_Frame/
+│   │   │   ├── Dashboard.py
+│   │   │   ├── History.py
+│   │   │   └── Sales.py
 │   │
-│   ├── database/
-│   │   ├── connect.py
-│   │   ├── create_tables.sql
-│   │   └── query_samples.sql
-│   │
-│   └── assets/
-│       └── icons/
+│   └── main.py
 │
 ├── README.md
-└── main.py
+└── studies.txt
+
 ```
 ## ⚙️ Installation
 1. Prerequisites
@@ -73,16 +84,28 @@ python main.py
 ```
 
 ## 📊 Example Screenshots
+Dashboard page: [] 
 
+History page: [] 
+
+Sales page: []
+
+Login page: []
 
 
 ## 🔍 Future Improvements
+- In any entry_search_data, I'd would like to add autofill or get suggestions when you enter any words 
 
+- Create Purchase Page to add multiple products and save into database
+
+- Authorize the employees 
+
+- Create Employee table - Consumers Table - Purchase Table
 
 
 # 🧑‍💻 Author
 
-Name: Chi Hao
+Name: Nguyen Van Chi Hao
 
 Role: Junior Student at An Giang University
 
