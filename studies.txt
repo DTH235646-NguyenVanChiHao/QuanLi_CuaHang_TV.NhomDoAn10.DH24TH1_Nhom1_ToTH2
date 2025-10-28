@@ -1,3 +1,8 @@
+1. Main loop  + subpage
+    https://chatgpt.com/c/68ff8959-0b0c-8322-ab12-4981f1ca43a8
+
+2. all the values from method to db will use tuple 
+
 # QuanLi_CuaHang_TV.NhomDoAn10.DH24TH1_Nhom1_ToTH2
 
 
@@ -118,6 +123,11 @@ A% → nghĩa là: bắt đầu bằng chữ A
 
 %A% → nghĩa là: chứa chữ A ở bất kỳ vị trí nào
 
+➡ Khi đó:
+
+HD01 xuất hiện 2 lần vì hóa đơn đó có 2 sản phẩm khác nhau (SP01, SP02).
+
+Nhưng cặp (HD01, SP01) chỉ có một dòng duy nhất, đảm bảo tính duy nhất của chi tiết.
 
 # to refresh anywhere => create refresh_data()
 
@@ -133,3 +143,17 @@ app -> pages[] = new page()
 app = self 
 
 app.pages[your required page].properties.properties
+
+
+#path 
+ folder_path = os.path.join("src", "assets", "QR_Image")
+        os.makedirs(folder_path, exist_ok=True) #Create if the folder doesn't exist
+
+
+# Lambda => can add params != callback cannnot add params 
+
+
+#
+#Trước khi gọi thì phải xoá widget
+#sau khi thêm xoá sửa sp thì gọi lại hàm _render_product
+#self.app.pages[sales]._render_product()
