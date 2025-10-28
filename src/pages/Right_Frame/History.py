@@ -86,7 +86,7 @@ class History:
        # Update
         self.btn_update_product = ctk.CTkButton(
             self.frame_functional_buttons_search,
-            text="✏️ Update Receipt",
+            text="✏️ Sửa Hoá Đơn",
             fg_color="#FFC107",
             hover_color="#E0A800",
             corner_radius=6,
@@ -98,7 +98,7 @@ class History:
         #Delete
         self.btn_delete_product = ctk.CTkButton(
             self.frame_functional_buttons_search,     
-            text="🗑️ Delete Receipt",
+            text="🗑️ Xoá hoá đơn",
             fg_color="#DC3545",
             hover_color="#C82333",
             corner_radius=6,

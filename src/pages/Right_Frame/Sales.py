@@ -330,7 +330,7 @@ class Sales:
 
         sort_btn = ctk.CTkButton(
            self.frame_functional_buttons_search,
-            text="Sort by",
+            text="Lọc theo",
             fg_color="#00B894",
             hover_color="#009970",
             corner_radius=6,

@@ -97,11 +97,11 @@ class MainApp:
         header.pack(pady=16)
 
         buttons = [
-            ("Dashboard", lambda: self._show_page("Dashboard")),
-            ("Sales", lambda: self._show_page("Sales")),
-            ("History", lambda: self._show_page("History")),
+            ("Trang chủ", lambda: self._show_page("Dashboard")),
+            ("Bán Hàng", lambda: self._show_page("Sales")),
+            ("Lịch sử", lambda: self._show_page("History")),
             #Cannot log out
-            ("Log out",lambda : self._logout())
+            ("Đăng xuất",lambda : self._logout())
         ]
 
           #Chu to hon - dam hon
@@ -123,11 +123,11 @@ class MainApp:
 ##Build Images
     def _build_info_sections(self):
         #Log
-        my_image = ctk.CTkImage(light_image=Image.open("src/assets/heart.png"),
-                                  size=(18, 18))
+        my_image = ctk.CTkImage(light_image=Image.open("src/assets/television.png"),
+                                  size=(25, 25))
         
         # Avatar
-        avatar_image = ctk.CTkImage(light_image=Image.open("src/assets/heart.png"), size=(36, 36))
+        avatar_image = ctk.CTkImage(light_image=Image.open("src/assets/user(1).png"), size=(30, 30))
         self.avatar_label = ctk.CTkLabel(
             self.container_logo_name,
             image=avatar_image,
@@ -177,15 +177,16 @@ class MainApp:
         if messagebox.askokcancel("Log out", "Do you want to log out?"):
             try:
                 self.db.close()  # đóng kết nối hiện tại
+                # Xóa các frame hiện có
+                for widget in self.root.winfo_children():
+                    widget.destroy()
+
+                # Quay lại trang Login
+                LoginPage(self.root, on_login_success=lambda: MainApp(self.root))
             except Exception as e:
                 print(f"Error closing DB: {e}")
 
-        # Xóa các frame hiện có
-        for widget in self.root.winfo_children():
-            widget.destroy()
-
-        # Quay lại trang Login
-        LoginPage(self.root, on_login_success=lambda: MainApp(self.root))
+        
 #==========================static==========================================
     @staticmethod
     def show_toast(master, text, duration=2000):

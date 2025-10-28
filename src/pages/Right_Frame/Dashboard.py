@@ -132,7 +132,7 @@ class Dashboard:
     def _create_buttons(self):
         self.btn_add_product = ctk.CTkButton(
             self.frame_functional_buttons_search,
-            text="➕ Add Product",
+            text="➕ Thêm sản phẩm",
             fg_color="#28A745",
             hover_color="#1E7E34",
             corner_radius=6,
@@ -143,7 +143,7 @@ class Dashboard:
 
         self.btn_update_product = ctk.CTkButton(
             self.frame_functional_buttons_search,
-            text="✏️ Update Product",
+            text="✏️ Sửa sản phẩm",
             fg_color="#FFC107",
             hover_color="#E0A800",
             corner_radius=6,
@@ -154,7 +154,7 @@ class Dashboard:
 
         self.btn_delete_product = ctk.CTkButton(
             self.frame_functional_buttons_search,     
-            text="🗑️ Delete Product",
+            text="🗑️ Xoá sản phẩm",
             fg_color="#DC3545",
             hover_color="#C82333",
             corner_radius=6,

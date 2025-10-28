@@ -1,9 +1,8 @@
 # 🧩 Project Title: Electronic Devices Management System
 # 📘 Overview
+Hi there, My name is Chi Hao - DTH235646 - Junior Student at An Giang University. Electronic Devices Management System is my final project in Python Subject.Collaborating to me is Quoc Bao - DTH235611. We're studying in the identical class - DH24TH1. 
 
-The Sales Management System is a full-stack desktop application designed to support small and medium-sized enterprises (SMEs) in managing their sales activities effectively. The program allows users to create, update, and track invoices, customers, and products through an intuitive graphical interface.
-
-This project demonstrates my skills in Python (CTkinter) for GUI design, SQL Server for database management, and Object-Oriented Programming (OOP) for maintaining clean, scalable code.
+This system not only manages and records the sales of electronic devices, including televisions and mobile phones, but also performs automatic calculations of the total daily revenue.
 
 ## 🚀 Key Features
 - I completely divide the whole program into smaller, which is called modules. The tiny modules alongside OOP design helps my program more reusable and less complex 
@@ -108,7 +107,7 @@ Login page: []
 
 # 🧑‍💻 Author
 
-Name: Nguyen Van Chi Hao
+Name: Nguyen Van Chi Hao - Tran Quoc Bao
 
 Role: Junior Student at An Giang University
 
