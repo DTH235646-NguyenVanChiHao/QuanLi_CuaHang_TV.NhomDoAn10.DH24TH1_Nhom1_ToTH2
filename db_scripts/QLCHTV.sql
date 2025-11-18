@@ -5,13 +5,6 @@ USE Quan_Li_TV;
 GO
 
 
-
-
-
-
-
-
-
 CREATE TABLE SanPham (
     MaSP VARCHAR(10) PRIMARY KEY,
     TenSP NVARCHAR(100) NOT NULL,
@@ -49,13 +42,7 @@ GO
 
 
 
----------- Insert
 
---Khong dung
---insert into SanPham (MaSP,TenSP,SLConLai,SoTien,NhaCC,NgayNhap) 
---values ("MSP1","TV Sony", 10,1000000,"Nha Cung Cap A", "12/9/2024")
-
---Properway 
 
 INSERT INTO SanPham (MaSP, TenSP, SLConLai, DonGiaBan, NhaCC, NgayNhap)
 VALUES
@@ -188,23 +175,3 @@ set TenKH = 'Chí Hào',
     SDT = '012345678'
 where mahd = 'HD01'
 
-
----
-select MaSP,TenSP , DonGiaBan, SLConLai
-from dbo.SanPham as sp
-order by TenSP
-asc
-
-SELECT MaSP,TenSP , DonGiaBan, SLConLai 
-FROM SanPham WHERE TenSP LIKE 'T%'
-
-
-UPDATE SanPham 
-SET SLConLai = SLConLai - 1
-WHERE MaSP = 'SP01'
-
-select *
-from SanPham
-
-select *
-from HoaDon
