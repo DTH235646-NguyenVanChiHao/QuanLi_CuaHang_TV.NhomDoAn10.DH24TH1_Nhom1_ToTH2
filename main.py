@@ -69,7 +69,8 @@ class MainApp:
         self.right_content.pack(side="right", fill="both", expand=True)
         self._build_pages()
 
-
+        #Default : Dashboard
+        self._show_page("Dashboard")
 
        
 #Main background = 
